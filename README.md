@@ -85,7 +85,7 @@ var extended = Extendable.extend(original)
         var value = p_super(c, d);
         return value * 2;
     })
-    // extend the with the overridden method and modify the
+    // extend the object with the overridden method and modify the
     // variable which is used in the overridden method.
     .extend({
         b: 5
