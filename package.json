@@ -1,7 +1,7 @@
 {
   "name": "extendable",
   "version": "0.0.1",
-  "description": "Node.js and browser AMD module (or global module) which assists extending objects and overriding methods",
+  "description": "A Node.js, AMD module, or global module which assists in extending objects and overriding object methods.",
   "main": "src/extendable.js",
   "directories": {
     "test": "test"
