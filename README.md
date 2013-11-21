@@ -1,6 +1,6 @@
 #Extendable.js
 
-A Node.js, AMD module, or global module which assists in extending objects and overriding object methods.
+A Node.js, AMD module, or global module which assists in extending objects and overriding object methods using prototypal inheritance.
 
 #Usage
 
