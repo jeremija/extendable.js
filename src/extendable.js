@@ -101,7 +101,7 @@
     };
 
     // export the module
-    if (module && module.exports) {
+    if (typeof module !== 'undefined' && module.exports) {
         // node.js
         module.exports = Extendable;
     }
