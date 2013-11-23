@@ -1,0 +1,27 @@
+{
+  "name": "extendable.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jeremija/extendable.js",
+  "authors": [
+    "jeremija <jerko.steiner@gmail.com>"
+  ],
+  "description": "A Node.js, AMD module, or global module which assists in extending objects and overriding object methods using prototypal inheritance.",
+  "main": "dist/extendable.js",
+  "keywords": [
+    "extend",
+    "override",
+    "object",
+    "prototypal",
+    "inheritance",
+    "amd",
+    "module"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
