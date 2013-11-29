@@ -70,11 +70,14 @@
          * object as it's prototype. The newly created object will contain
          * the properties defined by p_props
          *
-         * @param  {(Object|Function)} If it's an Object, it will forward the
-         * arguments to the {@see Extendable._extendLiteral} function. If it's
-         * a constructor function {@see Extendable._extendConstructor}.
-         * @return {Object}            The newly created object
-         * @throws {Error}             If p_props is not an object nor a
+         * @param  {(Object|Function)} p_props If it's an Object, it will
+         * forward the arguments to the {@link Extendable._extendLiteral}
+         * function. If it's a constructor function
+         * {@link Extendable._extendConstructor}.
+         * @param  {Object} p_prototype        Properties to copy to the
+         * prototype or the newly created object
+         * @return {Object}                    The newly created object
+         * @throws {Error}                     If p_props is not an object nor a
          * constructor function
          */
         extend: function(p_props, p_prototype) {
