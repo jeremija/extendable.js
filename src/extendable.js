@@ -13,26 +13,79 @@
         }
     };
 
+
     /**
-     * Main Extendable module
-     * @exports Extendable
+     * Extendable constructor.
+     * @class
+     * @name Extendable
+     * @private
      */
-    var Extendable = {
+    function Extendable() {
+
+    }
+
+    Extendable.prototype = /** @lends Extendable.prototype */ {
         /**
-         * Extend the object which holds this function and set the current
-         * object as it's prototype. The newly created object will contain
-         * the properties defined by p_props
-         *
-         * @param  {Object} p_props properties the new object will have
-         * @return {Object}         The newly created object
+         * Extends the literal object and set the current literal as the
+         * prototype.
+         * @private
+         * @param  {Object} p_props Properties to add to the new object
+         * @return {Object}         New object with set prototype and properties
          */
-        extend: function(p_props) {
+        _extendLiteral: function(p_props) {
             p_props = p_props || {};
             var extendedObject = this;
             // set the extended object as new object's prototype
             var newObject = Object.create(extendedObject);
             util.copyProperties(p_props, newObject);
             return newObject;
+        },
+        /**
+         * Extends the constructor function with the current SuperClass. This
+         * function will be added as the Constructor's `extend` function.
+         * @param  {Function} p_constructor Constructor function
+         * @param  {Object} p_prototype     Prototype object
+         * @return {Function}               Augmented p_constructor
+         * @private
+         */
+        _extendConstructor: function(p_constructor, p_prototype) {
+            var SuperClass = typeof this === 'function' ? this : Extendable;
+
+            // inherit SuperClass prototype
+            var prototype = Object.create(SuperClass.prototype);// || {});
+            // copy the p_prototype's properties into the new prototype
+            util.copyProperties(p_prototype, prototype);
+
+            p_constructor.prototype = prototype;
+            p_constructor.prototype.constructor = p_constructor;
+            p_constructor.prototype.superclass = SuperClass;
+
+            p_constructor.extend = this._extendConstructor || this.extend;
+            p_constructor.override = this.override;
+
+            return p_constructor;
+        },
+        /**
+         * Extend the object which holds this function and set the current
+         * object as it's prototype. The newly created object will contain
+         * the properties defined by p_props
+         *
+         * @param  {(Object|Function)} If it's an Object, it will forward the
+         * arguments to the {@see Extendable._extendLiteral} function. If it's
+         * a constructor function {@see Extendable._extendConstructor}.
+         * @return {Object}            The newly created object
+         * @throws {Error}             If p_props is not an object nor a
+         * constructor function
+         */
+        extend: function(p_props, p_prototype) {
+            if (typeof p_props === 'object') {
+                return this._extendLiteral(p_props);
+            }
+            if (typeof p_props === 'function') {
+                return this._extendConstructor(p_props, p_prototype);
+            }
+            throw new Error('p_props must be an object literal or a ' +
+                ' constructor function');
         },
         /**
          * Overrides a method on an existing object with the ability to call
@@ -100,19 +153,21 @@
         }
     };
 
+    var extendable = new Extendable();
+
     // export the module
     if (typeof module !== 'undefined' && module.exports) {
         // node.js
-        module.exports = Extendable;
+        module.exports = extendable;
     }
     else if (typeof define === 'function' && define.amd) {
         // amd module
         define([], function() {
-            return Extendable;
+            return extendable;
         });
     }
     else {
         // global variable
-        window.Extendable = Extendable;
+        window.Extendable = extendable;
     }
 }());

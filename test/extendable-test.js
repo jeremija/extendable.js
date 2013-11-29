@@ -1,5 +1,5 @@
 describe('Extendable', function() {
-    describe('#extend()', function() {
+    describe('extend()', function() {
         it('should have the function extend', function() {
             expect(Extendable).to.be.ok();
             expect(Extendable.extend).to.be.a('function');
@@ -28,7 +28,7 @@ describe('Extendable', function() {
             expect(newObject.extend).to.be(Extendable.extend);
         });
     });
-    describe('#override()', function() {
+    describe('override()', function() {
         it('should have the function override', function() {
             expect(Extendable.override).to.be.a('function');
         });
@@ -59,7 +59,7 @@ describe('Extendable', function() {
             expect(extended.sum(3, 4)).to.be(26);
         });
     });
-    describe('#create()', function() {
+    describe('create()', function() {
         it('should have the function create', function() {
             expect(Extendable.create).to.be.a('function');
         });
@@ -85,6 +85,73 @@ describe('Extendable', function() {
             expect(Module.name).to.be('unitialized-module');
             expect(module1.name).to.be('mod1');
             expect(module2.name).to.be('mod2');
+        });
+    });
+    describe('creating new instances', function() {
+        var Class;
+        it('should extend constructor with prototype', function() {
+            function ClassConstructor(p_params) {
+                this.a = p_params.a;
+                this.b = p_params.b;
+            }
+            var ClassPrototype = {
+                getA: function() {
+                    return this.a;
+                },
+                getB: function() {
+                    return this.b;
+                }
+            };
+            Class = Extendable.extend(ClassConstructor, ClassPrototype);
+
+            expect(Class).to.be(ClassConstructor);
+            expect(Class.prototype.getA).to.be(ClassPrototype.getA);
+            expect(Class.prototype.getB).to.be(ClassPrototype.getB);
+            expect(Class.extend).to.be(Extendable._extendConstructor);
+        });
+        it('should instantiate with new', function() {
+            var clazz = new Class({
+                a: 1,
+                b: 2
+            });
+            expect(clazz instanceof Class).to.be(true);
+            expect(clazz.a).to.be(1);
+            expect(clazz.getA()).to.be(1);
+            expect(clazz.b).to.be(2);
+            expect(clazz.getB()).to.be(2);
+        });
+        var ExtendedClass;
+        it('should be able to extend constructor', function() {
+            function ExtendedClassConstructor(p_params) {
+                // Class.call(this, p_params);
+                this.superclass(p_params);
+                this.c = p_params.c;
+            }
+            var ExtendedClassPrototype = {
+                getC: function() {
+                    return this.c;
+                }
+            };
+            ExtendedClass =
+                Class.extend(ExtendedClassConstructor, ExtendedClassPrototype);
+
+            expect(ExtendedClass.extend).to.be(Class.extend);
+            expect(ExtendedClass).to.be(ExtendedClassConstructor);
+        });
+        it('extended class hould instantiate with new', function() {
+            var extended = new ExtendedClass({
+                a: 3,
+                b: 4,
+                c: 5
+            });
+            expect(extended instanceof ExtendedClass).to.be(true);
+            expect(extended instanceof Class).to.be(true);
+            expect(extended.a).to.be(3);
+            expect(extended.b).to.be(4);
+            expect(extended.c).to.be(5);
+            expect(extended.getA()).to.be(3);
+            expect(extended.getB()).to.be(4);
+            expect(extended.getC()).to.be(5);
         });
     });
 });
