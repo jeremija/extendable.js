@@ -144,13 +144,14 @@ define(['Person'], function(Person) {
 // index.js
 require(['Plumber', 'Person'], function(Plumber, Person) {
 
-    var joe = new Plumber('joe', 'wrench');
+    var joe = new Plumber('joe johnson', 'wrench');
     
     // joe instanceof Plumber returns true
     // joe instanceof Person returns true
     // Person.prototype.isPrototypeOf(joe) returns true
     // Plumber.prototype.isPrototypeOf(joe) returns true
     
+    // joe.name is 'joe johnson'
     // joe.age is 25
     // joe.job is 'plumber'
     // joe.tools is 'wrench'
