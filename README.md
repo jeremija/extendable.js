@@ -22,7 +22,9 @@ or you can use it as a global variable `window.Extendable` in your browser.
 
 #Examples
 
-##extend()
+##Extension of object literals
+
+###extend()
 
 `extend(props)` creates a new object, set the current object (`this`) as the object's prototype and copies the first-level properties of `props` to the new object.
 
@@ -44,11 +46,11 @@ extended.b === props.b;             // returns true
 Extendable.isPrototypeOf(extended); // returns true
 ```
 
-##create()
+###create()
 
 Acts the same as if the `extend()` was called without any arguments, returns the same as calling `Object.create(this)`.
 
-##override()
+###override()
 
 `override(methodName, newMethod)` overrides an existing method `methodName` in the object and adds the ability to call the overridden method from the new method:
 
@@ -93,6 +95,68 @@ var extended = Extendable.extend(original)
 
 original.sum(3, 4); // 1 + 2 + 3 + 4 = 10
 extended.sum(3, 4); // (1 + 5 + 3 + 4) * 2 = 26
+```
+
+##Constructor extension
+
+```javascript
+
+// Person.js AMD module
+define(['Extendable'], function(Extendable) {
+    
+    function Person(name) {
+        this.name = name;
+    }
+    
+    var PersonPrototype = {
+        setJob: function(job) {
+            this.job = job;
+        },
+        setAge: function(age) {
+            this.age = age;
+        }
+    };
+    
+    return Extendable.extend(Person, PersonPrototype);
+    
+});
+
+// Plumber.js AMD module
+define(['Person'], function(Person) {
+    
+    function Plumber(name, tools) {
+        this.superclass.call(this, name);
+        
+        this.setJob('plumber');
+        this.setAge(25);
+        this.setTools(tools);
+    }
+    
+    var PlumberPrototype = {
+        setTools: function(tools) {
+            this.tools = tools;
+        }
+    };
+    
+    return Person.extend(Plumber, PlumberPrototype);
+});
+
+// index.js
+require(['Plumber', 'Person'], function(Plumber, Person) {
+
+    var joe = new Plumber('joe', 'wrench');
+    
+    // joe instanceof Plumber returns true
+    // joe instanceof Person returns true
+    // Person.prototype.isPrototypeOf(joe) returns true
+    // Plumber.prototype.isPrototypeOf(joe) returns true
+    
+    // joe.age is 25
+    // joe.job is 'plumber'
+    // joe.tools is 'wrench'
+
+});
+
 ```
 
 #License
